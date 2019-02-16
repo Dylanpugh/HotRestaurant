@@ -7,7 +7,7 @@ var PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-var reservations = [
+var waitlist = [
     {
         customerName: "Dylan",
         phoneNumber: "9495621919",
@@ -35,22 +35,35 @@ app.get("/reserve", function(req, res) {
     res.sendFile(path.join(__dirname, "reserve.html"));
 });
 
-app.get("/api/reservations", function(req, res) {
-    return res.json(reservations);
+app.get("/api/waitlist", function(req, res) {
+    return res.json(waitlist);
 });
 
-app.get("/api/reservations/:reservation", function(req, res) {
-    var chosen = req.params.reservation;
+app.get("/api/waitlist/:waitlist", function(req, res) {
+    var chosen = req.params.waitlist;
   
     console.log(chosen);
   
-    for (var i = 0; i < reservations.length; i++) {
-      if (chosen === reservations[i].customerID) {
-        return res.json(reservations[i]);
+    for (var i = 0; i < waitlist.length; i++) {
+      if (chosen === waitlist[i].customerID) {
+        return res.json(waitlist[i]);
       }
     }
   
     return res.json(false);
+});
+
+app.post("/api/waitlist", function(req, res) {
+
+    var newreservation = req.body;
+  
+    newreservation.customerID = newreservation.customerName.replace(/\s+/g, "").toLowerCase();
+  
+    console.log(newreservation);
+  
+    waitlist.push(newreservation);
+  
+    res.json(newreservation);
 });
 
 app.listen(PORT, function() {

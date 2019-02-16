@@ -33,7 +33,7 @@
                         </div>
                         <div class="panel-body">
     
-                            <form role="form">
+                            <form role="form" id="form">
     
                                 <div class="form-group">
                                     <label for="">Name</label>
@@ -55,7 +55,7 @@
                                     <input type="text" class="form-control" id="reserve_uniqueID">
                                 </div>
     
-                                <button type="submit" class="btn btn-primary submit">Submit</button>
+                                <button type="submit" class="btn btn-primary submit" id="submit">Submit</button>
                             </form>
     
                         </div>
@@ -66,14 +66,33 @@
     
             <footer class="footer">
               <div class="container">
-                <p><a href="/api/reservations">API Reservations Link</a> | <a href="/api/tables">API Table List</a> </p>
+                <p><a href="/api/waitlist">API Waitlist Link</a> | <a href="/api/tables">API Table List</a> </p>
               </div>
             </footer>
     
         </div>
     
-</body>
-<script>
+        <script type="text/javascript">
 
-</script>
+            $("#submit").on("click", function(event) {
+              event.preventDefault();
+        
+              var newReservation = {
+                customerName: $("#reserve_name").val().trim(),
+                phoneNumber: $("#reserve_phone").val().trim(),
+                customerEmail: $("#reserve_email").val().trim(),
+                customerID: $("#reserve_uniqueID").val().trim()
+              };
+        
+              $.post("/api/waitlist", newReservation)
+                .then(function(data) {
+                  console.log(data);
+                  alert("Adding reservation...");
+                });
+
+        
+            });
+        
+        </script>
+</body>
 </HTML>
